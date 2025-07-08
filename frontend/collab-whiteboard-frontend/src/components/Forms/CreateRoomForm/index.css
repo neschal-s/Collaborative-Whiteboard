@@ -1,0 +1,4 @@
+.btn-glow:hover {
+  box-shadow: 0 0 8px rgba(13, 110, 253, 0.5); /* Subtle blue glow */
+  transition: all 0.2s ease-in-out;
+}

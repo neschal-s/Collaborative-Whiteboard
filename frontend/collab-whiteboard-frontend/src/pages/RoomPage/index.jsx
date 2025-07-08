@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import "./index.css";
+import WhiteBoard from '../../components/whiteboard';
 
 const RoomPage = () => {
   const [tool, setTool] = useState("pencil");
@@ -7,8 +8,9 @@ const RoomPage = () => {
 
   return (
     <div className='container'>
-      <h1 className='text-center py-5'>
-        White Board Sharing App
+      <h1 className='text-center py-4'>
+        White Board Sharing App 
+        <span className='text-secondary text-s'> [Users Online: 0]</span>
       </h1>
 
       <div className='d-flex flex-wrap justify-content-center align-items-center mb-5'>
@@ -18,11 +20,12 @@ const RoomPage = () => {
           {['Pencil', 'Line', 'Rectangle'].map((item) => (
             <div key={item} className='d-flex align-items-center gap-1'>
               <input
-                type='radio'
+                type='radio' 
                 name='tool'
                 id={item}
+                checked={tool === item.toLowerCase()}
                 value={item}
-                checked={tool === item}
+                checked={tool === item.toLowerCase()}
                 onChange={(e) => setTool(e.target.value)}
                 className='mt-1'
               />
@@ -53,6 +56,10 @@ const RoomPage = () => {
         <div>
           <button className='btn btn-danger ms-5'>Clear Canvas</button>
         </div>
+      </div>
+
+      <div className='col-md-10 mx-auto mt-4 canvas-box'>
+        <WhiteBoard/>
       </div>
     </div>
   );

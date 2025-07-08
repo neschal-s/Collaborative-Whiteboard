@@ -1,9 +1,11 @@
 import React from 'react'
 
-const index = () => {
+const WhiteBoard = () => {
   return (
-    <div>index</div>
+    <canvas className='border border-dark border-2 h-100 w-100'>
+
+    </canvas>
   )
 }
 
-export default index
+export default WhiteBoard

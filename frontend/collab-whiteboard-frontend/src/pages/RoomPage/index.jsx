@@ -1,10 +1,16 @@
 import { useState } from 'react';
 import "./index.css";
 import WhiteBoard from '../../components/whiteboard';
+import { useRef } from 'react';
 
 const RoomPage = () => {
+
+  const canvasRef=useRef(null);
+  const ctxRef=useRef(null);
+
   const [tool, setTool] = useState("pencil");
-  const [color, setColor] = useState("#000000"); // Default color: black
+  const [color, setColor] = useState("#000000"); 
+  const [elements,setElements]=useState([]);
 
   return (
     <div className='container'>
@@ -17,21 +23,24 @@ const RoomPage = () => {
 
         {/* Tool Selection */}
         <div className='d-flex gap-3 me-4'>
-          {['Pencil', 'Line', 'Rectangle'].map((item) => (
-            <div key={item} className='d-flex align-items-center gap-1'>
-              <input
-                type='radio' 
-                name='tool'
-                id={item}
-                checked={tool === item.toLowerCase()}
-                value={item}
-                checked={tool === item.toLowerCase()}
-                onChange={(e) => setTool(e.target.value)}
-                className='mt-1'
-              />
-              <label htmlFor={item} className='text-capitalize'>{item}</label>
-            </div>
-          ))}
+          {['Pencil', 'Line', 'Rectangle'].map((item) => {
+  const value = item.toLowerCase();
+  return (
+    <div key={item} className='d-flex align-items-center gap-1'>
+      <input
+        type='radio'
+        name='tool'
+        id={item}
+        value={value}
+        checked={tool === value}
+        onChange={(e) => setTool(e.target.value)}
+        className='mt-1'
+      />
+      <label htmlFor={item} className='text-capitalize'>{item}</label>
+    </div>
+  );
+})}
+
         </div>
 
         {/* Color Picker */}
@@ -59,7 +68,11 @@ const RoomPage = () => {
       </div>
 
       <div className='col-md-10 mx-auto mt-4 canvas-box'>
-        <WhiteBoard/>
+        <WhiteBoard canvasRef={canvasRef} ctxRef={ctxRef}
+         elements={elements}
+         setElements={setElements}
+         tool={tool}
+         />
       </div>
     </div>
   );

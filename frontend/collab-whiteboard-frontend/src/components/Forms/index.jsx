@@ -12,7 +12,7 @@ const Forms=({uuid, socket,setUser})=>{
 
             <div className="col-md-4 mt-5 form-box py-3 px-5 border mx-auto border-primary rounded-2 d-flex flex-column align-items-center">
                 <h1 className="text-primary fw-bold mt-3">Join Room</h1>
-                <JoinRoomForm socket={socket} setUser={setUser}/>
+                <JoinRoomForm uuid={uuid} socket={socket} setUser={setUser}/>
             </div>
         </div>
     )

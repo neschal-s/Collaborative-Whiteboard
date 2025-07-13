@@ -23,7 +23,7 @@ const CreateRoomForm=({uuid,socket,setUser})=>{
         setUser(roomData);
         navigate(`/${roomId}`);
         console.log(roomData);
-        socket.emit("UserJoiner",roomData);
+        socket.emit("UserJoined",roomData);
 
     }
 

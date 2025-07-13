@@ -11,6 +11,16 @@ const RoomPage = () => {
   const [tool, setTool] = useState("pencil");
   const [color, setColor] = useState("#000000"); 
   const [elements,setElements]=useState([]);
+  
+
+  const handleClearCanvas=()=>{
+    const canvas=canvasRef.current;
+    const ctx=canvas.getContext("2d");
+    ctx.fillRect="white";
+    ctx.clearRect(0,0,canvasRef.current.width,canvasRef.current.height);
+    setElements([]);
+
+  }
 
   return (
     <div className='container'>
@@ -63,7 +73,7 @@ const RoomPage = () => {
 
         {/* Clear Button */}
         <div>
-          <button className='btn btn-danger ms-5'>Clear Canvas</button>
+          <button className='btn btn-danger ms-5 ' onClick={handleClearCanvas}>Clear Canvas</button>
         </div>
       </div>
 

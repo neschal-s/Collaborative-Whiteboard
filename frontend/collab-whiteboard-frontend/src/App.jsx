@@ -5,7 +5,7 @@ import RoomPage from './pages/RoomPage'
 import io from "socket.io-client";
 
 
-const server="http://localhost:5173";
+const server="http://localhost:5000";
 const connectionOptions={
   "force new connection":true,
   reconnectionAttempts:"Infinity",
@@ -14,7 +14,7 @@ const connectionOptions={
 }
 
 const socket=io(server,connectionOptions);
-import { useEffect, useState } from 'react'
+import { use, useEffect, useState } from 'react'
 
 
 
@@ -22,19 +22,51 @@ import { useEffect, useState } from 'react'
 const App=()=> {
 
   const [user,setUser]=useState(null);
+  const [users,setUsers]=useState([]);
 
 
 
-  useEffect(()=>{
-    socket.on("userIsJoined",(data)=>{
-      if(data.success){
-        console.log("userJoined");
-      }
-      else{
-        console.log("userNotJoined");
-      }
-    });
-  },[])
+
+  // useEffect(()=>{
+  //   socket.on("userIsJoined",(data)=>{
+  //     if(data.success){
+  //       console.log("userJoined");
+  //       setUser(users.data);
+  //     }
+  //     else{
+  //       console.log("userNotJoined");
+  //     }
+  //   });
+
+  //   socket.on("allusers",(data)=>{
+  //      setUsers(data);
+  //   })
+  // },[])
+
+  useEffect(() => {
+  socket.on("userIsJoined", (data) => {
+    if (data.success) {
+      console.log("userJoined");
+      setUser(data.user); // ✅ CORRECT
+      setUsers(data.users); // ✅ update users list too
+    } else {
+      console.log("userNotJoined");
+    }
+  });
+
+  socket.on("allUsers", (data) => {
+    setUsers(data);
+  });
+
+  return () => {
+    socket.off("userIsJoined");
+    socket.off("allUsers");
+  };
+}, []);
+
+
+
+
 
   const uuid=()=>{
     let S4=()=>{
@@ -51,7 +83,7 @@ const App=()=> {
         <Routes>
           <Route path="/" element={<Forms uuid={uuid} socket={socket} setUser={setUser}/> }/>
 
-          <Route path="/:roomId" element={<RoomPage/>} />
+          <Route path="/:roomId" element={<RoomPage user={user} socket={socket} users={users}/>} />
         </Routes> 
       </div>
     </>

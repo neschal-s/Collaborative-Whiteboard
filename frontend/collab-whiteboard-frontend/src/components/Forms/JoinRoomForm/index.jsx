@@ -16,7 +16,7 @@ const JoinRoomForm = ({ uuid, socket, setUser }) => {
       presenter: false,
     };
     setUser(roomData);
-    socket.emit("UserJoined", roomData);
+    socket.emit("userJoined", roomData);
     navigate(`/${roomId}`);
     console.log(roomData);
   };

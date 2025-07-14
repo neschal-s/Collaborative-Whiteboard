@@ -3,6 +3,7 @@ import Forms from './components/Forms/'
 import {Route, Routes} from 'react-router-dom'
 import RoomPage from './pages/RoomPage'
 import io from "socket.io-client";
+import {toast, ToastContainer} from 'react-toastify';
 
 
 const server="http://localhost:5000";
@@ -58,10 +59,23 @@ const App=()=> {
     setUsers(data);
   });
 
+  socket.on("userJoinedMessageBroadcast",(data)=>{
+    toast.info(`${data} joined the room`)
+    
+  });
+  
+
+  socket.on("userLeftMessageBroadcast", (data) => {
+  toast.info(`${data} left the room`);
+});
+
+
   return () => {
     socket.off("userIsJoined");
     socket.off("allUsers");
   };
+
+
 }, []);
 
 
@@ -80,6 +94,7 @@ const App=()=> {
   return (
     <>
       <div className='conatainer'>
+        <ToastContainer/>
         <Routes>
           <Route path="/" element={<Forms uuid={uuid} socket={socket} setUser={setUser}/> }/>
 

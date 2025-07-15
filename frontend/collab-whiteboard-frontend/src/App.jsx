@@ -6,7 +6,7 @@ import io from "socket.io-client";
 import {toast, ToastContainer} from 'react-toastify';
 
 
-const server="http://localhost:5000";
+const server = "http://127.0.0.1:5000";
 const connectionOptions={
   "force new connection":true,
   reconnectionAttempts:"Infinity",
@@ -48,14 +48,15 @@ const App=()=> {
   socket.on("userIsJoined", (data) => {
     if (data.success) {
       console.log("userJoined");
-      setUser(data.user); // ✅ CORRECT
-      setUsers(data.users); // ✅ update users list too
+      setUser(data.user);
+      setUsers(data.users);
     } else {
       console.log("userNotJoined");
     }
   });
 
   socket.on("allUsers", (data) => {
+    console.log("Updated users list: ", data);
     setUsers(data);
   });
 
@@ -64,7 +65,6 @@ const App=()=> {
     
   });
   
-
   socket.on("userLeftMessageBroadcast", (data) => {
   toast.info(`${data} left the room`);
 });
@@ -73,9 +73,9 @@ const App=()=> {
   return () => {
     socket.off("userIsJoined");
     socket.off("allUsers");
+    socket.off("userJoinedMessageBroadcast");
+    socket.off("userLeftMessageBroadcast");
   };
-
-
 }, []);
 
 
@@ -97,7 +97,6 @@ const App=()=> {
         <ToastContainer/>
         <Routes>
           <Route path="/" element={<Forms uuid={uuid} socket={socket} setUser={setUser}/> }/>
-
           <Route path="/:roomId" element={<RoomPage user={user} socket={socket} users={users}/>} />
         </Routes> 
       </div>

@@ -3,7 +3,8 @@ const app = express();
 const server = require("http").createServer(app);
 const { Server } = require("socket.io");
 
-const { addUser } = require('./utils/users');
+const { addUser, getUser, removeUser, getUsersInRoom } = require('./utils/users');
+
 
 const io = new Server(server, {
   cors: {
@@ -16,6 +17,13 @@ const io = new Server(server, {
 app.get('/', (req, res) => {
   res.send("This is the MERN realtime collaborative whiteboard backend");
 });
+
+app.get("/ping", (req, res) => {
+  res.send("pong");
+});
+
+
+
 
 let roomIdGlobal, imgURLGlobal;
 
@@ -42,16 +50,17 @@ io.on("connection", (socket) => {
   })
 
   // socket.on("disconnect", () => {
-  //   const user= getUser(socket.id);
-    
+  //   const user= getUser(socket.id); 
   //   if(user){
   //     removeUser(socket.id);
   //     socket.broadcast.to(roomIdGlobal).emit("userLeftMessageBroadcast",user.name);
   //   }
   // });
+
+
+
   socket.on("disconnect", () => {
   const user = getUser(socket.id);
-
   if (user) {
     removeUser(socket.id);
     socket.broadcast.to(user.roomId).emit("userLeftMessageBroadcast", user.name);
@@ -59,10 +68,6 @@ io.on("connection", (socket) => {
     socket.broadcast.to(user.roomId).emit("allUsers", updatedUsers);
   }
 });
-
-
-
-
 
 });
 

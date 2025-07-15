@@ -16,7 +16,7 @@ const RoomPage = ({user,socket,users}) => {
   const [history,setHistory]=useState([]);
   const [openedUserTab,setOpenedUserTab]=useState(false);  
 
-
+  
 
   const handleClearCanvas = () => {
   const canvas = canvasRef.current;

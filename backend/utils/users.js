@@ -16,7 +16,7 @@ const removeUser=(id)=>{
 
 const getUser=(id)=>{
     return users.find((user)=>user.socketId===id);
-}
+};
 
 const getUsersInRoom=(roomId)=>{
     return users.filter((user)=>user.roomId===roomId);

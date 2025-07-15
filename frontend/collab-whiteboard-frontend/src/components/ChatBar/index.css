@@ -1,0 +1,37 @@
+/* index.css or global styles */
+.chat-box {
+  background-color: #1f1f1f;
+  color: white;
+  border-radius: 10px;
+}
+
+.chat-bubble {
+  border-radius: 12px;
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  max-width: 80%;
+  word-break: break-word;
+}
+
+.chat-bubble.user {
+  background-color: #007bff;
+  color: white;
+  align-self: flex-end;
+}
+
+.chat-bubble.other {
+  background-color: #2d2d2d;
+  color: #ccc;
+  align-self: flex-start;
+}
+
+.dot-typing::after {
+  content: '...';
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0% { opacity: 0 }
+  50% { opacity: 1 }
+  100% { opacity: 0 }
+}

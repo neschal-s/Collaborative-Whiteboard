@@ -105,7 +105,7 @@ const RoomPage = ({user,socket,users}) => {
     <AnimatePresence>
     {
       openedChatTab && (
-        <Chat setOpenedChatTab={setOpenedChatTab}/>       
+        <Chat setOpenedChatTab={setOpenedChatTab} socket={socket}/>       
     )};
     </AnimatePresence>
 

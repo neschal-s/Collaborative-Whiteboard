@@ -49,13 +49,23 @@ io.on("connection", (socket) => {
     });
   })
 
-  // socket.on("disconnect", () => {
-  //   const user= getUser(socket.id); 
-  //   if(user){
-  //     removeUser(socket.id);
-  //     socket.broadcast.to(roomIdGlobal).emit("userLeftMessageBroadcast",user.name);
-  //   }
-  // });
+  socket.on("typing", (data) => {
+  const user = getUser(socket.id);
+  if (user) {
+    socket.broadcast.to(user.roomId).emit("typingResponse", `${user.name} is typing...`);
+  }
+});
+
+  socket.on("message",(data)=>{
+    const {message}=data;
+    const user = getUser(socket.id);
+    if (user) {
+    socket.broadcast.to(roomIdGlobal).emit("messageResponse",{message,name:user.name});
+  }
+   
+  });
+
+
 
 
 

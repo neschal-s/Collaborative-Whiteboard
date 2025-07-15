@@ -3,6 +3,8 @@ import "./index.css";
 import WhiteBoard from '../../components/whiteboard';
 import { useRef } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
+import Chat from '../../components/ChatBar';
+
 
 
 const RoomPage = ({user,socket,users}) => {
@@ -14,9 +16,11 @@ const RoomPage = ({user,socket,users}) => {
   const [color, setColor] = useState("#000000"); 
   const [elements,setElements]=useState([]);
   const [history,setHistory]=useState([]);
-  const [openedUserTab,setOpenedUserTab]=useState(false);  
+  const [openedUserTab,setOpenedUserTab]=useState(false);
+  const [openedChatTab,setOpenedChatTab]=useState(false);  
 
-  
+
+
 
   const handleClearCanvas = () => {
   const canvas = canvasRef.current;
@@ -47,13 +51,29 @@ const RoomPage = ({user,socket,users}) => {
         style={{
           display:"block",
           position:"absolute",
-          top:"5%",
-          left:"5%",
+          top:"7%",
+          left:"3%",
           height:"40px",
           width:"100px",
         }}
         onClick={()=>setOpenedUserTab(true)}
       >Users</button>
+
+      <button type="button" className='btn btn-primary'
+        style={{
+          display:"block",
+          position:"absolute",
+          top:"7%",
+          left:"10%",
+          height:"40px",
+          width:"100px",
+        }}
+        onClick={()=>setOpenedChatTab(true)}
+      >Chats</button>
+
+      
+
+
       <AnimatePresence>
   {openedUserTab && (
     <motion.div
@@ -80,7 +100,14 @@ const RoomPage = ({user,socket,users}) => {
       </div>
     </motion.div>
   )}
-</AnimatePresence>
+  </AnimatePresence>
+
+    <AnimatePresence>
+    {
+      openedChatTab && (
+        <Chat setOpenedChatTab={setOpenedChatTab}/>       
+    )};
+    </AnimatePresence>
 
 
       <h1 className='text-center py-4'>

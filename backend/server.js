@@ -39,7 +39,7 @@ io.on("connection", (socket) => {
     socket.broadcast.to(roomIdGlobal).emit("WhiteBoardDataResponse", {
       imgURL: data,
     });
-  });
+  })
 
   // socket.on("disconnect", () => {
   //   const user= getUser(socket.id);
@@ -54,11 +54,7 @@ io.on("connection", (socket) => {
 
   if (user) {
     removeUser(socket.id);
-
-    // ✅ Use user's actual roomId instead of global
     socket.broadcast.to(user.roomId).emit("userLeftMessageBroadcast", user.name);
-
-    // Optional: broadcast updated user list to room
     const updatedUsers = getUsersInRoom(user.roomId);
     socket.broadcast.to(user.roomId).emit("allUsers", updatedUsers);
   }

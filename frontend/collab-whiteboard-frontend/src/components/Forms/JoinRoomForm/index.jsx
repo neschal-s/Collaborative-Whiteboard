@@ -36,7 +36,7 @@ const JoinRoomForm = ({ uuid, socket, setUser }) => {
       <div className="form-group">
         <input
           type="text"
-          className="form-control border rounded"
+          className="form-control border rounded my-2"
           placeholder="Enter Room Code "
           value={roomId}
           onChange={(e) => setRoomId(e.target.value)}
@@ -46,6 +46,7 @@ const JoinRoomForm = ({ uuid, socket, setUser }) => {
       <button
         type="submit"
         className="mt-5 btn btn-primary btn-block btn-highlight form-control"
+        disabled={!roomId.trim()}
       >
         Join Room
       </button>

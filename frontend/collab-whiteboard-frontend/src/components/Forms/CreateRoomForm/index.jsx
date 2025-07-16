@@ -1,6 +1,8 @@
 import { use, useState } from "react";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Socket } from "socket.io-client";
 
 const CreateRoomForm=({uuid,socket,setUser})=>{
@@ -41,15 +43,27 @@ const CreateRoomForm=({uuid,socket,setUser})=>{
                         <button className="btn btn-primary btn-sm me-2" onClick={()=>setroomId(uuid())} type="button">
                             Generate
                         </button>
-                        <button className="btn btn-outline-danger btn-sm me-2 hover:" type="button">
-                            Copy
-                        </button>
+                        <button
+                            className="btn btn-outline-danger btn-sm me-2"
+                            type="button"
+                            onClick={() => {
+                                navigator.clipboard.writeText(roomId);
+                                toast.success("Room ID copied to clipboard!", {
+                                position: "top-right",
+                                autoClose: 1500,
+                                });
+                            }}
+                            >
+                                Copy
+                                </button>
+
                     </div>
                     </div>
                 </div>
-                <button type="submit" className="mt-5 btn btn-primary btn-block btn-highlight form-control" onClick={handleCreateRoom}>
+                <button type="submit" className="mt-5 btn btn-primary btn-block btn-highlight form-control" onClick={handleCreateRoom} disabled={!name.trim()}>
                     Generate Room
                 </button>
+                <ToastContainer />
         </form>
     )
 };

@@ -26,7 +26,10 @@ const WhiteBoard = ({ canvasRef, ctxRef, elements, setElements, color, tool,user
     style={{
       height: "100vh",
       width: "100vw",
-      objectFit: "contain"
+      objectFit: "contain",
+      textAlign: "center",
+      display:"flex",
+
     }}
   />
 </div>

@@ -4,17 +4,25 @@ import JoinRoomForm from "./JoinRoomForm";
 
 const Forms=({uuid, socket,setUser})=>{
     return (
-        <div className="row h-100 pt-5">
-            <div className="col-md-4 mt-5 form-box py-3 px-5 border mx-auto border-primary rounded-2 d-flex flex-column align-items-center">
-                <h1 className="text-primary fw-bold mt-3">Create Room</h1>
-                <CreateRoomForm uuid={uuid} socket={socket} setUser={setUser}/>
-            </div>
+        <div className="container h-100 pt-5">
+  <div className="row justify-content-center gap-4">
+    <div className="col-12 col-md-5 form-box py-4 px-5 border border-primary rounded-3 d-flex flex-column align-items-center shadow-sm">
+      <h1 className="text-primary fw-bold mb-4 text-center" style={{ fontFamily: 'Carien, serif' }}>
+        Create Room
+      </h1>
+      <CreateRoomForm uuid={uuid} socket={socket} setUser={setUser} />
+    </div>
 
-            <div className="col-md-4 mt-5 form-box py-3 px-5 border mx-auto border-primary rounded-2 d-flex flex-column align-items-center">
-                <h1 className="text-primary fw-bold mt-3">Join Room</h1>
-                <JoinRoomForm uuid={uuid} socket={socket} setUser={setUser}/>
-            </div>
-        </div>
+    <div className="col-12 col-md-5 form-box py-4 px-5 border border-primary rounded-3 d-flex flex-column align-items-center shadow-sm">
+      <h1 className="text-primary fw-bold mb-4 text-center" style={{ fontFamily: 'Carien, serif' }}>
+        Join Room
+      </h1>
+      <JoinRoomForm uuid={uuid} socket={socket} setUser={setUser} />
+    </div>
+  </div>
+</div>
+
+
     )
 };
 export default Forms;

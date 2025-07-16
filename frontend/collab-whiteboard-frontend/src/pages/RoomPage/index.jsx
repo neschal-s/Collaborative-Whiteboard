@@ -53,8 +53,8 @@ const RoomPage = ({user,socket,users}) => {
           position:"absolute",
           top:"7%",
           left:"3%",
-          height:"40px",
-          width:"100px",
+          height:"38px",
+          width:"90px",
         }}
         onClick={()=>setOpenedUserTab(true)}
       >Users</button>
@@ -65,13 +65,31 @@ const RoomPage = ({user,socket,users}) => {
           position:"absolute",
           top:"7%",
           left:"10%",
-          height:"40px",
-          width:"100px",
+          height:"38px",
+          width:"90px",
         }}
         onClick={()=>setOpenedChatTab(true)}
       >Chats</button>
 
-      
+
+
+      <div
+        className="dynamic-text"
+        style={{
+          position: 'absolute',
+          top: '15px',
+          right: '-55px',
+          fontWeight: '500',
+          fontSize: '18px',
+        }}
+         >
+        👥 Users Online: {users.length}
+      </div>
+
+
+
+
+
 
 
       <AnimatePresence>
@@ -107,13 +125,9 @@ const RoomPage = ({user,socket,users}) => {
       openedChatTab && (
         <Chat setOpenedChatTab={setOpenedChatTab} socket={socket}/>       
     )};
+    
     </AnimatePresence>
-
-
-      <h1 className='text-center py-4'>
-        White Board Sharing App{" "}
-        <span className='text-primary'> [Users Online: {users.length}]</span>
-      </h1>
+      
       {
         user?.presenter && (
           <div className='d-flex flex-wrap justify-content-center align-items-center mb-5'>
@@ -133,7 +147,8 @@ const RoomPage = ({user,socket,users}) => {
         onChange={(e) => setTool(e.target.value)}
         className='mt-1'
       />
-      <label htmlFor={item} className='text-capitalize'>{item}</label>
+      {/* <label htmlFor={item} className='text-capitalize'>{item}</label> */}
+      <label htmlFor={item} className='text-capitalize dynamic-text'>{item}</label>
     </div>
   );
 })}
@@ -142,19 +157,20 @@ const RoomPage = ({user,socket,users}) => {
 
         {/* Color Picker */}
         <div className='d-flex align-items-center gap-2 me-5 ms-5'>
-          <label htmlFor='color'>Select Color:</label>
+          {/* <label htmlFor='color'>Select Color:</label> */}
+          <label htmlFor='color' className="dynamic-text">Select Color:</label>
           <input
             type='color'
             id='color'
             value={color}
             onChange={(e) => setColor(e.target.value)}
-            className='form-control form-control-color border- mt-1 ms-3'
+            className='form-control form-control-color mt-1 ms-2'
           />
         </div>
 
         {/* Undo / Redo Buttons */}
         <div className='d-flex gap-2 me-5'>
-          <button className='btn btn-primary ms-5'
+          <button className='btn btn-primary ms-5 border-0 '
             disabled={elements.length==0}
             onClick={()=>undo()}          
           
@@ -177,7 +193,7 @@ const RoomPage = ({user,socket,users}) => {
 
       
 
-      <div className='col-md-10 mx-auto mt-4 canvas-box'>
+      <div className='col-md-12 mx-auto mt-1'>
         <WhiteBoard 
           canvasRef={canvasRef} 
           ctxRef={ctxRef}

@@ -6,24 +6,31 @@ const roughGenerator = rough.generator();
 const WhiteBoard = ({ canvasRef, ctxRef, elements, setElements, color, tool,user,socket }) => {
 
   const [img,setImg]=useState(null);
-  useEffect(()=>{
-    socket.on("WhiteBoardDataResponse",(data)=>{
-      setImg(data.imgURL);
-    });
-  },[]);
+ useEffect(() => {
+  const handler = (data) => setImg(data.imgURL);
+  socket.on("WhiteBoardDataResponse", handler);
+  return () => {
+    socket.off("WhiteBoardDataResponse", handler);
+  };
+}, []);
+
 
 
   if(!user?.presenter)
   {
     return (
       <div className="border border-dark border-2 h-100 w-100 overflow-hidden">
-        <img src={img} alt="Real time white board image shared by presenter" 
-          style={{
-            height:window.innerHeight * 2,
-            width:"285%",
-          }}
-          />
-      </div>
+  <img
+    src={img}
+    alt="Real time white board image shared by presenter"
+    style={{
+      height: "100vh",
+      width: "100vw",
+      objectFit: "contain"
+    }}
+  />
+</div>
+
     );
   }
 
@@ -32,8 +39,12 @@ const WhiteBoard = ({ canvasRef, ctxRef, elements, setElements, color, tool,user
   
   useEffect(() => {
     const canvas = canvasRef.current;
-    canvas.height = window.innerHeight * 2;
-    canvas.width = window.innerWidth * 2;
+    // canvas.height = window.innerHeight * 2;
+    // canvas.width = window.innerWidth * 2;
+
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+
     const ctx = canvas.getContext("2d");
 
     ctx.strokeStyle=color;

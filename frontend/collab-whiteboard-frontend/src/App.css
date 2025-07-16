@@ -1,0 +1,178 @@
+:root {
+  --bg-color: #f8f9fa;
+  --text-color: #222;
+  --card-bg: white;
+}
+
+[data-theme="dark"] {
+  --bg-color: #121212;
+  --text-color: #ddd;
+  --card-bg: #1e1e1e;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background 0.3s, color 0.3s;
+}
+
+.form-box {
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  transition: background 0.3s, color 0.3s;
+}
+
+/* Optional: Lighten Toasts in dark mode */
+[data-theme="dark"] .Toastify__toast {
+  background-color: #333;
+  color: #eee;
+}
+
+/* Theme toggle container */
+.theme-toggle input {
+  display: none;
+}
+
+.theme-toggle .switch {
+  position: relative;
+  display: inline-block;
+  width: 55px;
+  height: 28px;
+  background: #ccc;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+/* The white circle */
+.theme-toggle .slider {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+  z-index: 2;
+}
+
+/* Icons */
+.theme-toggle .sun,
+.theme-toggle .moon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 13px;
+  z-index: 1;
+}
+
+.theme-toggle .sun {
+  left: 6px;
+  color: #f39c12;
+}
+
+.theme-toggle .moon {
+  right: 6px;
+  color: #2980b9;
+}
+
+/* Move circle to right when checked */
+.theme-toggle input:checked + .switch .slider {
+  transform: translateX(27px);
+}
+
+/* Background change for switch */
+.theme-toggle input:checked + .switch {
+  background: #666;
+}
+@font-face {
+  font-family: 'Carien';
+  src: url('./assets/fonts/Carien.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'WastedVindey';
+  src: url('./assets/fonts/WastedVindey.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.main-heading {
+  transition: color 0.3s ease;
+}
+
+.sub-heading {
+  transition: color 0.3s ease;
+}
+
+body[data-theme="dark"] .main-heading,
+body[data-theme="dark"] .sub-heading {
+  color: #fff;
+}
+/* Heading colors */
+.main-heading,
+.sub-heading {
+  color: var(--text-color);
+  transition: color 0.3s ease;
+}
+.header-wrapper {
+  background-color: transparent;
+}
+
+[data-theme="dark"] .header-wrapper {
+  background-color: #1e1e1e;
+}
+
+
+body[data-theme="light"] {
+  --text-color: #000000;
+  --bg-color: #ffffff;
+}
+
+body[data-theme="dark"] {
+  --text-color: #ffffff;
+  --bg-color: #121212; /* or your preferred dark background */
+}
+
+/* Apply the variable */
+body {
+  color: var(--text-color);
+  background-color: var(--bg-color);
+}
+
+/* Also update other elements if needed */
+.text-white {
+  color: var(--text-color) !important;
+}
+
+.text-dark {
+  color: var(--text-color) !important;
+}
+
+
+
+/* Light Theme */
+body[data-theme="light"] {
+  --text-color: #000000;
+  --bg-color: #ffffff;
+}
+
+/* Dark Theme */
+body[data-theme="dark"] {
+  --text-color: #ffffff;
+  --bg-color: #121212;
+}
+
+/* Apply these variables */
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+/* Optional utility class */
+.dynamic-text {
+  color: var(--text-color);
+}
+

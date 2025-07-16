@@ -1,107 +1,219 @@
-import './App.css'
-import Forms from './components/Forms/'
-import {Route, Routes} from 'react-router-dom'
-import RoomPage from './pages/RoomPage'
-import io from "socket.io-client";
-import {toast, ToastContainer} from 'react-toastify';
+// import './App.css'
+// import Forms from './components/Forms/'
+// import {Route, Routes} from 'react-router-dom'
+// import RoomPage from './pages/RoomPage'
+// import io from "socket.io-client";
+// import {toast, ToastContainer} from 'react-toastify';
 
+
+// const server = "http://127.0.0.1:5000";
+// const connectionOptions={
+//   "force new connection":true,
+//   reconnectionAttempts:"Infinity",
+//   timeout:10000,
+//   transports:["websocket"],
+// }
+
+// const socket=io(server,connectionOptions);
+// import { use, useEffect, useState } from 'react'
+
+
+
+
+// const App=()=> {
+
+//   const [user,setUser]=useState(null);
+//   const [users,setUsers]=useState([]);
+
+
+//   useEffect(() => {
+//   socket.on("userIsJoined", (data) => {
+//     if (data.success) {
+//       console.log("userJoined");
+//       setUser(data.user);
+//       setUsers(data.users);
+//     } else {
+//       console.log("userNotJoined");
+//     }
+//   });
+
+//   socket.on("allUsers", (data) => {
+//     console.log("Updated users list: ", data);
+//     setUsers(data);
+//   });
+
+//   socket.on("userJoinedMessageBroadcast",(data)=>{
+//     toast.info(`${data} joined the room`)
+    
+//   });
+  
+//   socket.on("userLeftMessageBroadcast", (data) => {
+//   toast.info(`${data} left the room`);
+// });
+
+
+//   return () => {
+//     socket.off("userIsJoined");
+//     socket.off("allUsers");
+//     socket.off("userJoinedMessageBroadcast");
+//     socket.off("userLeftMessageBroadcast");
+//   };
+// }, []);
+
+
+
+
+
+//   const uuid=()=>{
+//     let S4=()=>{
+//       return (((1 +Math.random())* 0x10000) | 0 ).toString(16).substring(1);
+//     };
+//     return (
+//       S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4()
+//     );
+//   }
+
+//   return (
+//     <>
+//       <div className='conatainer'>
+//         <ToastContainer/>
+//         <Routes>
+//           <Route path="/" element={<Forms uuid={uuid} socket={socket} setUser={setUser}/> }/>
+//           <Route path="/:roomId" element={<RoomPage user={user} socket={socket} users={users}/>} />
+//         </Routes> 
+//       </div>
+//     </>
+//   )
+// }
+
+// export default App
+
+
+
+
+import './App.css';
+import Forms from './components/Forms/';
+import { Route, Routes } from 'react-router-dom';
+import RoomPage from './pages/RoomPage';
+import io from "socket.io-client";
+import { toast, ToastContainer } from 'react-toastify';
+import { useEffect, useState } from 'react';
 
 const server = "http://127.0.0.1:5000";
-const connectionOptions={
-  "force new connection":true,
-  reconnectionAttempts:"Infinity",
-  timeout:10000,
-  transports:["websocket"],
-}
+const connectionOptions = {
+  "force new connection": true,
+  reconnectionAttempts: "Infinity",
+  timeout: 10000,
+  transports: ["websocket"],
+};
 
-const socket=io(server,connectionOptions);
-import { use, useEffect, useState } from 'react'
+const socket = io(server, connectionOptions);
 
-
-
-
-const App=()=> {
-
-  const [user,setUser]=useState(null);
-  const [users,setUsers]=useState([]);
-
-
-
-
-  // useEffect(()=>{
-  //   socket.on("userIsJoined",(data)=>{
-  //     if(data.success){
-  //       console.log("userJoined");
-  //       setUser(users.data);
-  //     }
-  //     else{
-  //       console.log("userNotJoined");
-  //     }
-  //   });
-
-  //   socket.on("allusers",(data)=>{
-  //      setUsers(data);
-  //   })
-  // },[])
+const App = () => {
+  const [user, setUser] = useState(null);
+  const [users, setUsers] = useState([]);
+  const [theme, setTheme] = useState("light");
 
   useEffect(() => {
-  socket.on("userIsJoined", (data) => {
-    if (data.success) {
-      console.log("userJoined");
-      setUser(data.user);
-      setUsers(data.users);
-    } else {
-      console.log("userNotJoined");
-    }
-  });
+    document.body.setAttribute("data-theme", theme);
+  }, [theme]);
 
-  socket.on("allUsers", (data) => {
-    console.log("Updated users list: ", data);
-    setUsers(data);
-  });
+  useEffect(() => {
+    socket.on("userIsJoined", (data) => {
+      if (data.success) {
+        setUser(data.user);
+        setUsers(data.users);
+      }
+    });
 
-  socket.on("userJoinedMessageBroadcast",(data)=>{
-    toast.info(`${data} joined the room`)
-    
-  });
-  
-  socket.on("userLeftMessageBroadcast", (data) => {
-  toast.info(`${data} left the room`);
-});
+    socket.on("allUsers", (data) => {
+      setUsers(data);
+    });
 
+    socket.on("userJoinedMessageBroadcast", (data) => {
+      toast.info(`${data} joined the room`);
+    });
 
-  return () => {
-    socket.off("userIsJoined");
-    socket.off("allUsers");
-    socket.off("userJoinedMessageBroadcast");
-    socket.off("userLeftMessageBroadcast");
-  };
-}, []);
+    socket.on("userLeftMessageBroadcast", (data) => {
+      toast.info(`${data} left the room`);
+    });
 
-
-
-
-
-  const uuid=()=>{
-    let S4=()=>{
-      return (((1 +Math.random())* 0x10000) | 0 ).toString(16).substring(1);
+    return () => {
+      socket.off("userIsJoined");
+      socket.off("allUsers");
+      socket.off("userJoinedMessageBroadcast");
+      socket.off("userLeftMessageBroadcast");
     };
-    return (
-      S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4()
-    );
-  }
+  }, []);
+
+  const uuid = () => {
+    let S4 = () => (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+    return S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4();
+  };
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+  };
 
   return (
-    <>
-      <div className='conatainer'>
-        <ToastContainer/>
-        <Routes>
-          <Route path="/" element={<Forms uuid={uuid} socket={socket} setUser={setUser}/> }/>
-          <Route path="/:roomId" element={<RoomPage user={user} socket={socket} users={users}/>} />
-        </Routes> 
-      </div>
-    </>
-  )
-}
+  <>
+    
 
-export default App
+    <div className="container-fluid min-vh-100">
+      <ToastContainer />
+      <header className="px-4 pt-3 d-flex flex-column align-items-center position-relative">
+          <h1
+            className="main-heading"
+            style={{
+              fontWeight: "700",
+              fontSize: "2.5rem",
+              fontFamily: "WastedVindey, serif",
+            }}
+          >
+            COLLABPAD
+          </h1>
+
+          <div
+            className="theme-toggle position-absolute top-0 end-0 me-4"
+            style={{ marginTop: ".9rem" }}
+          >
+            <input
+              type="checkbox"
+              id="themeSwitch"
+              checked={theme === "dark"}
+              onChange={toggleTheme}
+            />
+            <label
+              htmlFor="themeSwitch"
+              className="switch"
+              title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+            >
+              <span className="sun"></span>
+              <span className="moon">🌙</span>
+              <span className="slider" />
+            </label>
+          </div>
+</header>
+<p
+  className="text-center sub-heading"
+  style={{
+    fontSize: "1rem",
+    fontFamily: "Carien, serif",
+  }}
+>
+  Connect, create, and collaborate seamlessly
+</p>
+
+
+
+      <Routes>
+        <Route path="/" element={<Forms uuid={uuid} socket={socket} setUser={setUser} />} />
+        <Route path="/:roomId" element={<RoomPage user={user} socket={socket} users={users} />} />
+      </Routes>
+    </div>
+  </>
+);
+
+};
+
+export default App;

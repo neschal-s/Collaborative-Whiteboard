@@ -103,10 +103,8 @@ io.on("connection", (socket) => {
 
   const users = addUser({ name, userId, roomId, host, presenter, socketId: socket.id });
 
-  // Send success + users list to the joining user
   socket.emit("userIsJoined", { success: true, user: data, users });
 
-  // Send a toast message to the joining user explicitly
   socket.emit("userJoinedMessageBroadcast", "You joined the room");
 
   // Broadcast to others in the room that someone joined

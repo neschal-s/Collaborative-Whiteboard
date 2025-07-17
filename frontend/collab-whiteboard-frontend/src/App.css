@@ -73,7 +73,7 @@ body {
 }
 
 .theme-toggle .moon {
-  right: 6px;
+  right: 1px;
   color: #2980b9;
 }
 
@@ -176,3 +176,121 @@ body {
   color: var(--text-color);
 }
 
+[data-theme='dark'] {
+  background-color: #121212;
+  color: white;
+}
+
+[data-theme='light'] {
+  background-color: white;
+  color: black;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 25px;
+  background: #ccc;
+  border-radius: 25px;
+  cursor: pointer;
+}
+
+.switch .slider {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  background: #fff;
+  top: 1.5px;
+  left: 1.5px;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+input[type="checkbox"]:checked + .switch .slider {
+  transform: translateX(25px);
+}
+
+.switch .moon {
+  position: absolute;
+  right: 5px;
+  top: 3px;
+  font-size: 15px;
+}
+
+.switch .sun {
+  position: absolute;
+  left: 5px;
+  top: 3px;
+  font-size: 15px;
+}
+
+.theme-toggle {
+  position: relative;
+  width: 55px;
+  height: 28px;
+}
+
+.theme-toggle input {
+  display: none;
+}
+
+.theme-toggle .switch {
+  position: relative;
+  display: block;
+  width: 55px;
+  height: 28px;
+  background: #ccc;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+/* The white circle */
+.theme-toggle .slider {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+  z-index: 2;
+}
+
+/* Sun icon (left side) */
+.theme-toggle .sun {
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  color: #f39c12;
+  pointer-events: none;
+  user-select: none;
+  z-index: 1;
+}
+
+/* Moon icon (right side) */
+.theme-toggle .moon {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  color: #2980b9;
+  pointer-events: none;
+  user-select: none;
+  z-index: 1;
+}
+
+/* Move white circle when checked */
+.theme-toggle input:checked + .switch .slider {
+  transform: translateX(27px);
+}
+
+/* Change background color when checked */
+.theme-toggle input:checked + .switch {
+  background: #666;
+}

@@ -5,6 +5,7 @@ import RoomPage from './pages/RoomPage';
 import io from "socket.io-client";
 import { toast, ToastContainer } from 'react-toastify';
 import { useEffect, useState } from 'react';
+import Loader from './components/Loader/Loader';
 
 const server = "http://127.0.0.1:5000";
 const connectionOptions = {
@@ -19,10 +20,27 @@ const socket = io(server, connectionOptions);
 const App = () => {
   const [user, setUser] = useState(null);
   const [users, setUsers] = useState([]);
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState("dark");
+  const [loading, setLoading] = useState(true);
 
+  // On mount: load saved theme or system preference
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme) {
+      setTheme(savedTheme);
+    } else {
+      const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setTheme(isDark ? "dark" : "light");
+    }
+
+    const timer = setTimeout(() => setLoading(false), 3000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Whenever theme changes, update body attribute & save preference
   useEffect(() => {
     document.body.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
   }, [theme]);
 
   useEffect(() => {
@@ -62,13 +80,13 @@ const App = () => {
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
   };
 
-  return (
-  <>
-    
-
-    <div className="container-fluid min-vh-100">
-      <ToastContainer />
-      <header className="px-4 pt-3 d-flex flex-column align-items-center position-relative">
+  return loading ? (
+    <Loader theme={theme} />
+  ) : (
+    <>
+      <div className="container-fluid min-vh-100">
+        <ToastContainer />
+        <header className="px-4 pt-3 d-flex flex-column align-items-center position-relative">
           <h1
             className="main-heading"
             style={{
@@ -93,34 +111,32 @@ const App = () => {
             <label
               htmlFor="themeSwitch"
               className="switch"
-              title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+              title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
             >
               <span className="sun"></span>
               <span className="moon">🌙</span>
               <span className="slider" />
             </label>
           </div>
-</header>
-<p
-  className="text-center sub-heading"
-  style={{
-    fontSize: "1rem",
-    fontFamily: "Carien, serif",
-  }}
->
-  Connect, create, and collaborate seamlessly
-</p>
+        </header>
 
+        <p
+          className="text-center sub-heading"
+          style={{
+            fontSize: "1rem",
+            fontFamily: "Carien, serif",
+          }}
+        >
+          Connect, create, and collaborate seamlessly
+        </p>
 
-
-      <Routes>
-        <Route path="/" element={<Forms uuid={uuid} socket={socket} setUser={setUser} />} />
-        <Route path="/:roomId" element={<RoomPage user={user} socket={socket} users={users} />} />
-      </Routes>
-    </div>
-  </>
-);
-
+        <Routes>
+          <Route path="/" element={<Forms uuid={uuid} socket={socket} setUser={setUser} />} />
+          <Route path="/:roomId" element={<RoomPage user={user} socket={socket} users={users} />} />
+        </Routes>
+      </div>
+    </>
+  );
 };
 
 export default App;

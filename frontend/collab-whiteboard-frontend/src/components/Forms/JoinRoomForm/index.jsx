@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const JoinRoomForm = ({ uuid, socket, setUser }) => {
+const JoinRoomForm = ({ uuid, socket, setUser, setFormLoading }) => {
   const [roomId, setRoomId] = useState("");
   const [name, setName] = useState("");
   const navigate = useNavigate();
 
   const handleRoomJoin = (e) => {
     e.preventDefault();
+
+    if (!name.trim() || !roomId.trim()) return;
+
     const roomData = {
       name,
       roomId,
@@ -15,10 +18,16 @@ const JoinRoomForm = ({ uuid, socket, setUser }) => {
       host: false,
       presenter: false,
     };
+
+    setFormLoading(true); // Show loader
+
     setUser(roomData);
     socket.emit("userJoined", roomData);
-    navigate(`/${roomId}`);
-    console.log(roomData);
+
+    setTimeout(() => {
+      navigate(`/${roomId}`);
+      setFormLoading(false); // Stop loader after navigation
+    }, 3000);// Optional delay
   };
 
   return (
@@ -37,7 +46,7 @@ const JoinRoomForm = ({ uuid, socket, setUser }) => {
         <input
           type="text"
           className="form-control border rounded my-2"
-          placeholder="Enter Room Code "
+          placeholder="Enter Room Code"
           value={roomId}
           onChange={(e) => setRoomId(e.target.value)}
         />

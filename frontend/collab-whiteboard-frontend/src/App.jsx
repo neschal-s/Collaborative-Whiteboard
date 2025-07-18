@@ -9,7 +9,7 @@ import Loader from './components/Loader/Loader';
 import { AnimatePresence, motion } from "framer-motion";
 import { useLocation } from "react-router-dom";
 
-const server = "http://127.0.0.1:5000";
+const server = import.meta.env.VITE_BACKEND_URL;
 const socket = io(server, {
   "force new connection": true,
   reconnectionAttempts: "Infinity",

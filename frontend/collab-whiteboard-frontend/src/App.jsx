@@ -6,16 +6,16 @@ import io from "socket.io-client";
 import { toast, ToastContainer } from 'react-toastify';
 import { useEffect, useState } from 'react';
 import Loader from './components/Loader/Loader';
+import { AnimatePresence, motion } from "framer-motion";
+import { useLocation } from "react-router-dom";
 
 const server = "http://127.0.0.1:5000";
-const connectionOptions = {
+const socket = io(server, {
   "force new connection": true,
   reconnectionAttempts: "Infinity",
   timeout: 10000,
   transports: ["websocket"],
-};
-
-const socket = io(server, connectionOptions);
+});
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -23,25 +23,24 @@ const App = () => {
   const [theme, setTheme] = useState("dark");
   const [loading, setLoading] = useState(true);
 
-  // On mount: load saved theme or system preference
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme) {
       setTheme(savedTheme);
     } else {
-      const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const isDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
       setTheme(isDark ? "dark" : "light");
     }
-
-    const timer = setTimeout(() => setLoading(false), 3000);
+    const timer = setTimeout(() => setLoading(false), 2500);
     return () => clearTimeout(timer);
   }, []);
 
-  // Whenever theme changes, update body attribute & save preference
   useEffect(() => {
     document.body.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
   }, [theme]);
+  const location = useLocation();
+
 
   useEffect(() => {
     socket.on("userIsJoined", (data) => {
@@ -50,23 +49,14 @@ const App = () => {
         setUsers(data.users);
       }
     });
-
-    socket.on("allUsers", (data) => {
-      setUsers(data);
-    });
-
-    socket.on("userJoinedMessageBroadcast", (data) => {
-      toast.info(`${data} joined the room`);
-    });
-
-    socket.on("userLeftMessageBroadcast", (data) => {
-      toast.info(`${data} left the room`);
-    });
-
+    socket.on("allUsers", (data) => setUsers(data));
+    socket.on("userJoinedMessageBroadcast", (data) => {toast.info(`${data} joined the room`); });
+  
+    socket.on("userLeftMessageBroadcast", (data) => toast.info(`${data} left the room` ));
+ 
     return () => {
       socket.off("userIsJoined");
       socket.off("allUsers");
-      socket.off("userJoinedMessageBroadcast");
       socket.off("userLeftMessageBroadcast");
     };
   }, []);
@@ -77,65 +67,93 @@ const App = () => {
   };
 
   const toggleTheme = () => {
-    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+    setTheme(prev => prev === "light" ? "dark" : "light");
   };
 
-  return loading ? (
-    <Loader theme={theme} />
-  ) : (
-    <>
-      <div className="container-fluid min-vh-100">
-        <ToastContainer />
-        <header className="px-4 pt-3 d-flex flex-column align-items-center position-relative">
-          <h1
-            className="main-heading"
-            style={{
-              fontWeight: "700",
-              fontSize: "2.5rem",
-              fontFamily: "Carien, serif",
-            }}
-          >
-            COLLABPAD
-          </h1>
-
-          <div
-            className="theme-toggle position-absolute top-0 end-0 me-4"
-            style={{ marginTop: ".9rem" }}
-          >
-            <input
-              type="checkbox"
-              id="themeSwitch"
-              checked={theme === "dark"}
-              onChange={toggleTheme}
-            />
-            <label
-              htmlFor="themeSwitch"
-              className="switch"
-              title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
-            >
-              <span className="sun"></span>
-              <span className="moon">🌙</span>
-              <span className="slider" />
-            </label>
-          </div>
-        </header>
-
-        <p
-          className="text-center sub-heading"
-          style={{
-            fontSize: "1rem",
-            fontFamily: "Carien, serif",
-          }}
+  return (
+    <AnimatePresence mode="wait">
+      {loading ? (
+  <AnimatePresence>
+    <motion.div
+      key="loader"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.4 }}
+    >
+      <Loader theme={theme} />
+    </motion.div>
+  </AnimatePresence>
+) : (
+        <motion.div
+          key="main"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
         >
-          Connect, create, and collaborate seamlessly
-        </p>
+          <div className="container-fluid min-vh-100">
+            <ToastContainer />
+            <header className="px-4 pt-3 d-flex flex-column align-items-center position-relative">
+              <h1 className="main-heading" style={{
+                fontWeight: "700",
+                fontSize: "2.5rem",
+                fontFamily: "Carien, serif"
+              }}>
+                COLLABPAD
+              </h1>
 
-        <Routes>
-          <Route path="/" element={<Forms uuid={uuid} socket={socket} setUser={setUser} />} />
-          <Route path="/:roomId" element={<RoomPage user={user} socket={socket} users={users} />} />
-        </Routes>
-      </div>
-    </>
+              <div className="theme-toggle position-absolute top-0 end-0 me-4" style={{ marginTop: ".9rem" }}>
+                <input
+                  type="checkbox"
+                  id="themeSwitch"
+                  checked={theme === "dark"}
+                  onChange={toggleTheme}
+                />
+                <label htmlFor="themeSwitch" className="switch">
+                  <span className="sun"></span>
+                  <span className="moon">🌙</span>
+                  <span className="slider" />
+                </label>
+              </div>
+            </header>
+
+            <p className="text-center sub-heading" style={{
+              fontSize: "1rem",
+              fontFamily: "Carien, serif"
+            }}>
+              Connect, create, and collaborate seamlessly
+            </p>
+
+            <AnimatePresence mode="wait">
+          <ToastContainer/>
+          <Routes location={location} key={location.pathname}>
+            
+            <Route path="/" element={
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.4 }}
+              >
+                <Forms uuid={uuid} socket={socket} setUser={setUser} />
+              </motion.div>
+            } />
+            <Route path="/:roomId" element={
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.4 }}
+              >
+                <RoomPage user={user} socket={socket} users={users} />
+              </motion.div>
+            } />
+          </Routes>
+        </AnimatePresence>
+                  </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
 

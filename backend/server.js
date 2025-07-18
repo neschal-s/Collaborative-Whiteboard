@@ -97,25 +97,24 @@ let imgURLGlobal = null; // keep latest whiteboard image
 
 io.on("connection", (socket) => {
 
-  socket.on("userJoined", (data) => {
-  const { name, userId, roomId, host, presenter } = data;
-  socket.join(roomId);
+      socket.on("userJoined", (data) => {
+      const { name, userId, roomId, host, presenter } = data;
+      socket.join(roomId);
 
-  const users = addUser({ name, userId, roomId, host, presenter, socketId: socket.id });
+      const users = addUser({ name, userId, roomId, host, presenter, socketId: socket.id });
+      socket.emit("userIsJoined", { success: true, user: data, users });
+      socket.emit("userJoinedMessageBroadcast", name);
+      socket.broadcast.to(roomId).emit("allUsers", users);
+      socket.broadcast.to(roomId).emit("WhiteBoardDataRsponse",{
+        imgURL: imgURLGlobal
+      }); 
+    });
 
-  socket.emit("userIsJoined", { success: true, user: data, users });
 
-  socket.emit("userJoinedMessageBroadcast", "You joined the room");
+  // if (imgURLGlobal) {
+  //   socket.emit("WhiteBoardDataResponse", { imgURL: imgURLGlobal });
+  // }
 
-  // Broadcast to others in the room that someone joined
-  socket.broadcast.to(roomId).emit("userJoinedMessageBroadcast", name);
-
-  socket.broadcast.to(roomId).emit("allUsers", users);
-
-  if (imgURLGlobal) {
-    socket.emit("WhiteBoardDataResponse", { imgURL: imgURLGlobal });
-  }
-});;
 
   socket.on("WhiteBoardData", (data) => {
     const user = getUser(socket.id);
@@ -158,8 +157,9 @@ io.on("connection", (socket) => {
       socket.broadcast.to(user.roomId).emit("allUsers", updatedUsers);
     }
   });
-
 });
+
+
 
 const port = process.env.PORT || 5000;
 server.listen(port, () => console.log(`Server is running on http://localhost:${port}`));

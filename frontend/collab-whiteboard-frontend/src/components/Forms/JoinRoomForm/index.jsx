@@ -14,20 +14,17 @@ const JoinRoomForm = ({ uuid, socket, setUser, setFormLoading }) => {
     const roomData = {
       name,
       roomId,
-      userid: uuid(),
+      userId: uuid(),
       host: false,
       presenter: false,
     };
-
-    setFormLoading(true); // Show loader
-
+    setFormLoading(true); // Start loader
     setUser(roomData);
-    socket.emit("userJoined", roomData);
-
-    setTimeout(() => {
-      navigate(`/${roomId}`);
-      setFormLoading(false); // Stop loader after navigation
-    }, 3000);// Optional delay
+    socket.emit("userJoined", roomData);  
+  setTimeout(() => {
+    navigate(`/${roomId}`);
+    setFormLoading(false);
+  }, 3000);
   };
 
   return (

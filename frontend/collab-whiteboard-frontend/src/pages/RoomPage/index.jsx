@@ -5,6 +5,9 @@ import WhiteBoard from '../../components/whiteboard';
 import { motion, AnimatePresence } from "framer-motion";
 import Chat from '../../components/ChatBar';
 import CollaborativeCodeEditor from '../../components/CollaborativeCodeEditor';
+import { useEffect } from 'react';
+import { toast } from 'react-toastify';
+
 
 const RoomPage = ({ user, socket, users }) => {
   const { roomId } = useParams();
@@ -36,6 +39,33 @@ const RoomPage = ({ user, socket, users }) => {
     setElements((prevElements) => [...prevElements, history[history.length - 1]]);
     setHistory((prevHistory) => prevHistory.slice(0, prevHistory.length - 1));
   };
+
+//  useEffect(() => {
+//   if (!socket) return;
+
+//   const handleUserJoined = ({ name, self,userId }) => {
+//     if (self) {
+//     toast.info("You joined the room");
+//   } else {
+//     toast.info(`${name} joined the room`);
+//   }
+//   };
+
+//   const handleUserLeft = (name) => {
+//     toast.info(`${name} left the room`);
+//   };
+
+//   // socket.on("userJoinedMessageBroadcast", handleUserJoined);
+//   // socket.on("userLeftMessageBroadcast", handleUserLeft);
+
+//   // return () => {
+//   //   socket.off("userJoinedMessageBroadcast", handleUserJoined);
+//   //   socket.off("userLeftMessageBroadcast", handleUserLeft);
+//   };
+// }, [socket]);
+
+
+
 
   return (
     <div className='row'>

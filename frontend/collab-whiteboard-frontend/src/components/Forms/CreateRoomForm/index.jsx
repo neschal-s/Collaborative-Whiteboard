@@ -26,7 +26,9 @@ const CreateRoomForm = ({ uuid, socket, setUser, setFormLoading }) => {
     setFormLoading(true); // Start loader
 
     setUser(roomData);
-    socket.emit("userJoined", roomData);
+    socket.emit("userJoined", roomData);  
+    
+    
 
     setTimeout(() => {
       navigate(`/${roomId}`);

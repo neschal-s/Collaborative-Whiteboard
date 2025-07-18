@@ -10,12 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@monaco-editor/react": "^4.7.0",
     "axios": "^1.10.0",
     "bootstrap": "^5.3.7",
     "framer-motion": "^12.23.6",
     "lottie-react": "^2.4.1",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-router-dom": "^7.6.3",
     "react-toastify": "^11.0.5",
     "roughjs": "^4.6.6",

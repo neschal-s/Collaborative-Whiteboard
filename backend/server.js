@@ -1,6 +1,7 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
-app.use(express.json());
+app.use(express.json({ limit:'10mb'}));
 
 const server = require("http").createServer(app);
 const { Server } = require("socket.io");
@@ -10,7 +11,7 @@ const axios = require('axios');
 const { addUser, getUser, removeUser, getUsersInRoom } = require('./utils/users');
 
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: process.env.FRONTEND_ORIGIN,
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
@@ -46,8 +47,8 @@ app.post('/run', async (req, res) => {
       {
         headers: {
           'Content-Type': 'application/json',
-          'X-RapidAPI-Key': '191bea411emshea9d29947f8f32dp1eadf1jsn88386b501171',
-          'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com',
+          'X-RapidAPI-Key': process.env.RAPIDAPI_KEY,
+          'X-RapidAPI-Host': process.env.RAPIDAPI_HOST,
         },
       }
     );
@@ -60,8 +61,8 @@ app.post('/run', async (req, res) => {
           `https://judge0-ce.p.rapidapi.com/submissions/${token}`,
           {
             headers: {
-              'X-RapidAPI-Key': '191bea411emshea9d29947f8f32dp1eadf1jsn88386b501171',
-              'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com',
+              'X-RapidAPI-Key': process.env.RAPIDAPI_KEY,
+              'X-RapidAPI-Host': process.env.RAPIDAPI_HOST,
             },
           }
         );
@@ -88,7 +89,7 @@ app.post('/run', async (req, res) => {
 // Socket.IO setup with CORS
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173", // Frontend origin
+    origin:  process.env.FRONTEND_ORIGIN, // Frontend origin
     methods: ["GET", "POST"]
   }
 });
@@ -109,11 +110,6 @@ io.on("connection", (socket) => {
         imgURL: imgURLGlobal
       }); 
     });
-
-
-  // if (imgURLGlobal) {
-  //   socket.emit("WhiteBoardDataResponse", { imgURL: imgURLGlobal });
-  // }
 
 
   socket.on("WhiteBoardData", (data) => {

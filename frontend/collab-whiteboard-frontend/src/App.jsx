@@ -8,6 +8,8 @@ import { useEffect, useState } from 'react';
 import Loader from './components/Loader/Loader';
 import { AnimatePresence, motion } from "framer-motion";
 import { useLocation } from "react-router-dom";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const server = import.meta.env.VITE_BACKEND_URL;
 const socket = io(server, {
@@ -50,14 +52,23 @@ const App = () => {
       }
     });
     socket.on("allUsers", (data) => setUsers(data));
-    socket.on("userJoinedMessageBroadcast", (data) => {toast.info(`${data} joined the room`); });
+    socket.on("userJoinedMessageBroadcast", (data) => {toast.info(`${data} joined the room`,{
+                  position: "top-right",
+                  autoClose: 1500,
+                })
+               });
   
-    socket.on("userLeftMessageBroadcast", (data) => toast.info(`${data} left the room` ));
+    socket.on("userLeftMessageBroadcast", (data) => toast.info(`${data} left the room`,{
+                  position: "top-right",
+                  autoClose: 1500,
+                })
+              );
  
     return () => {
       socket.off("userIsJoined");
       socket.off("allUsers");
       socket.off("userLeftMessageBroadcast");
+      socket.off("userJoinedMessageBroadcast");
     };
   }, []);
 
@@ -92,7 +103,16 @@ const App = () => {
           exit={{ opacity: 0 }}
         >
           <div className="container-fluid min-vh-100">
-            <ToastContainer />
+            <ToastContainer 
+                position="top-right"
+                autoClose={1500}           // match with toast calls or set default here
+                closeButton={true}
+                closeOnClick={true}
+                pauseOnHover={true}
+                pauseOnFocusLoss={true}
+                draggable={true}
+                theme={theme}
+              />
             <header className="px-4 pt-3 d-flex flex-column align-items-center position-relative">
               <h1 className="main-heading" style={{
                 fontWeight: "700",
@@ -125,7 +145,6 @@ const App = () => {
             </p>
 
             <AnimatePresence mode="wait">
-          <ToastContainer/>
           <Routes location={location} key={location.pathname}>
             
             <Route path="/" element={

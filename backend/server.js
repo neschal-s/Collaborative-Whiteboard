@@ -106,7 +106,7 @@ io.on("connection", (socket) => {
       socket.emit("userIsJoined", { success: true, user: data, users });
       socket.emit("userJoinedMessageBroadcast", name);
       socket.broadcast.to(roomId).emit("allUsers", users);
-      socket.broadcast.to(roomId).emit("WhiteBoardDataRsponse",{
+      socket.broadcast.to(roomId).emit("WhiteBoardDataResponse",{
         imgURL: imgURLGlobal
       }); 
     });

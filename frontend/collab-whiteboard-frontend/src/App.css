@@ -294,3 +294,57 @@ input[type="checkbox"]:checked + .switch .slider {
 .theme-toggle input:checked + .switch {
   background: #666;
 }
+
+.footer {
+  width: 100%;
+  background-color: black;
+  color: #ccc;
+  padding: 1.5rem 0;
+  text-align: center;
+  border-top: 1px solid #2e2e2e;
+  margin-top: 7rem;
+  font-family: Arial, sans-serif;
+}
+
+.footer p {
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+  color: #d1d5db;
+}
+
+.footer-icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.footer-icons a {
+  color: #d1d5db;
+  text-decoration: none;
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.footer-icons a:hover {
+  transform: translateY(-3px);
+  color: white;
+}
+
+.footer-icons a[aria-label="LinkedIn"]:hover {
+  color: #0a66c2;
+}
+.footer-icons a[aria-label="GitHub"]:hover {
+  color: #333;
+}
+.footer-icons a[aria-label="Twitter / X"]:hover {
+  color: #74bdea;
+}
+
+.footer-icons a[aria-label="Email"]:hover {
+  color: #ea4335;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+}

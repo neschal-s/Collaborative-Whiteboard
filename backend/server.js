@@ -7,8 +7,7 @@ const server = require("http").createServer(app);
 const { Server } = require("socket.io");
 const cors = require('cors'); 
 const axios = require('axios');
-
-const { addUser, getUser, removeUser, getUsersInRoom } = require('./utils/users');
+const {addUser, getUser, removeUser, getUsersInRoom} = require('./utils/users');
 
 app.use(cors({
   origin: process.env.FRONTEND_ORIGIN,
@@ -16,7 +15,6 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
 }));
-
 // Routes
 app.get('/', (req, res) => {
   res.send("This is the MERN realtime collaborative whiteboard backend");

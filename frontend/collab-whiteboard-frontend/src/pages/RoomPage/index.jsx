@@ -40,31 +40,6 @@ const RoomPage = ({ user, socket, users }) => {
     setHistory((prevHistory) => prevHistory.slice(0, prevHistory.length - 1));
   };
 
-//  useEffect(() => {
-//   if (!socket) return;
-
-//   const handleUserJoined = ({ name, self,userId }) => {
-//     if (self) {
-//     toast.info("You joined the room");
-//   } else {
-//     toast.info(`${name} joined the room`);
-//   }
-//   };
-
-//   const handleUserLeft = (name) => {
-//     toast.info(`${name} left the room`);
-//   };
-
-//   // socket.on("userJoinedMessageBroadcast", handleUserJoined);
-//   // socket.on("userLeftMessageBroadcast", handleUserLeft);
-
-//   // return () => {
-//   //   socket.off("userJoinedMessageBroadcast", handleUserJoined);
-//   //   socket.off("userLeftMessageBroadcast", handleUserLeft);
-//   };
-// }, [socket]);
-
-
 
 
   return (

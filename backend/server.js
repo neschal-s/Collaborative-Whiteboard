@@ -9,10 +9,25 @@ const cors = require('cors');
 const axios = require('axios');
 const {addUser, getUser, removeUser, getUsersInRoom} = require('./utils/users');
 
+
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://collab-webpad.vercel.app"
+];
+
 app.use(cors({
-  origin: process.env.FRONTEND_ORIGIN,
-  methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true); // Allow server-to-server or Postman
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = `CORS blocked for origin: ${origin}`;
+      console.error(msg);
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
 }));
 // Routes
@@ -87,10 +102,12 @@ app.post('/run', async (req, res) => {
 // Socket.IO setup with CORS
 const io = new Server(server, {
   cors: {
-    origin:  process.env.FRONTEND_ORIGIN, // Frontend origin
-    methods: ["GET", "POST"]
-  }
+    origin: allowedOrigins,
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
 });
+
 
 let imgURLGlobal = null; // keep latest whiteboard image
 
